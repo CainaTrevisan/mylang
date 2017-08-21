@@ -1,5 +1,5 @@
 calc : calc.yy.c 
-	gcc calc.yy.c calc.tab.c ast.c ast.h -lfl -o calc
+	gcc calc.yy.c calc.tab.c ast.c ast.h -lfl -lm -o calc
 
 calc.yy.c : calc.l calc.tab.h
 	flex -o calc.yy.c calc.l

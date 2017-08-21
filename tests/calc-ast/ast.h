@@ -2,7 +2,7 @@
  Header for an ast
 */
 
-/* Flex things*/
+/* Flex things */
 extern int yylineno;
 void yyerror(char *s, ...);
 
@@ -14,24 +14,25 @@ struct symbol {
     struct symlist *syms;   // list of dummy args
 };
 
-#define NHASG 9997
-struct symbol symtab[NHASH]
+#define NHASH 9997
+struct symbol symtab[NHASH];
 
 struct symbol *lookup(char*);
 
 struct symlist {
     struct symbol *sym;
-    struct symlist *next
+    struct symlist *next;
 };
 
-struct symlist *new_symlist(struct symibol *sym, struct symlist *next);
+struct symlist *new_symlist(struct symbol *sym, struct symlist *next);
 void free_symlist(struct symlist *sl);
 
 /* Node Types
  + - * /
  0-7 Comparison ops, bit coded 04 equal, 02 less, 01 greater
  M  Unary Minus
- L  Expression of Statement List
+ P  Unary Plus
+ L  Expression or Statement List
  I  If Statement
  W  While Statement
  N  Symbol Ref
@@ -44,6 +45,7 @@ void free_symlist(struct symlist *sl);
 enum bifs {
     B_sqrt = 1,
     B_exp,
+    B_pow,
     B_log,
     B_print
 };
@@ -64,7 +66,7 @@ struct fncall {         // built-in functions
 struct ufncall {        // User defined functions
     int nodetype;       // type C
     struct ast *l;      // list of arguments
-    truct symbol *s;
+    struct symbol *s;
 };
 
 struct flow {
@@ -85,7 +87,7 @@ struct symref {
     struct symbol *s;
 };
 
-struct symasg {
+struct symasgn {
     int nodetype;       // type =
     struct symbol *s;
     struct ast *v;
@@ -98,10 +100,11 @@ struct ast *new_cmp(int cmptype, struct ast *l, struct ast *r);
 struct ast *new_func(int functype, struct ast *l);
 struct ast *new_call(struct symbol *s, struct ast *l);
 struct ast *new_ref(struct symbol *s);
-struct ast *new_asg(struct symbol *s, struct ast *l);
-struct ast *new_flow(int nodetype, struct ast *cond, struct ast *tl, struct ast *tr);
+struct ast *new_asgn(struct symbol *s, struct ast *v);
+struct ast *new_flow(int nodetype, struct ast *cond, struct ast *tl, struct ast *el);
 
 // Define Function
+void dodef (struct symbol *name, struct symlist *syms, struct ast *stmts);
 
 // Evaluate ast
 double eval(struct ast *);

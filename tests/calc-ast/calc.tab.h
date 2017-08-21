@@ -46,9 +46,19 @@ extern int yydebug;
   enum yytokentype
   {
     NUMBER = 258,
-    EOL = 259,
-    UMINUS = 260,
-    UPLUS = 261
+    NAME = 259,
+    FUNC = 260,
+    EOL = 261,
+    IF = 262,
+    THEN = 263,
+    END = 264,
+    ELSE = 265,
+    WHILE = 266,
+    DO = 267,
+    LET = 268,
+    CMP = 269,
+    UMINUS = 270,
+    UPLUS = 271
   };
 #endif
 
@@ -59,10 +69,13 @@ union YYSTYPE
 {
 #line 12 "calc.y" /* yacc.c:1909  */
 
-  struct AST *a;
+  struct ast *a;
   double d;
+  struct symbol *s;     // which symbol
+  struct symlist *sl;   // which function
+  int fn;
 
-#line 66 "calc.tab.h" /* yacc.c:1909  */
+#line 79 "calc.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
